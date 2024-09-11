@@ -8,7 +8,7 @@ const Footer = () => {
   return (
     <div style={footerStyle}>
       <br />
-      <em>Note app, Department of Computer Science, University of Helsinki 2023</em>
+      <em>Person app, inspired by Note app created by Department of Computer Science, University of Helsinki 2023</em>
     </div>
   )
 }

@@ -1,89 +1,65 @@
 import { useState, useEffect } from 'react'
-import Note from './components/Note'
-import Notification from './components/Notification'
+import Person from './components/Person'
 import Footer from './components/Footer'
-import noteService from './services/notes'
+import personService from './services/persons'
 
 const App = () => {
-  const [notes, setNotes] = useState([])
-  const [newNote, setNewNote] = useState('')
-  const [showAll, setShowAll] = useState(true)
-  const [errorMessage, setErrorMessage] = useState(null)
+  const [persons, setPersons] = useState([])
+  const [newName, setNewName] =  useState('')
+  const [newNumber, setNewNumber] = useState('')
 
   useEffect(() => {
-    noteService
+    personService
       .getAll()
-      .then(initialNotes => {
-        setNotes(initialNotes)
+      .then(initialPersons => {
+        setPersons(initialPersons)
       })
   }, [])
 
-  const addNote = (event) => {
+  const addPerson = (event) => {
     event.preventDefault()
-    const noteObject = {
-      content: newNote,
-      important: Math.random() > 0.5,
+    const personObject = {
+      name: newName,
+      number: newNumber
     }
   
-    noteService
-      .create(noteObject)
-        .then(returnedNote => {
-        setNotes(notes.concat(returnedNote))
-        setNewNote('')
+    personService
+      .create(personObject)
+        .then(returnedPerson => {
+          setPersons(persons.concat(returnedPerson))
+          setNewName('')
+          setNewNumber('')
       })
   }
 
-  const toggleImportanceOf = id => {
-    const note = notes.find(n => n.id === id)
-    const changedNote = { ...note, important: !note.important }
-  
-    noteService
-      .update(id, changedNote)
-        .then(returnedNote => {
-        setNotes(notes.map(note => note.id !== id ? note : returnedNote))
-      })
-      .catch(error => {
-        setErrorMessage(
-          `Note '${note.content}' was already removed from server`
-        )
-        setTimeout(() => {
-          setErrorMessage(null)
-        }, 5000)
-      })
+  const handleNameChange = (event) => {
+    setNewName(event.target.value)
   }
-
-  const handleNoteChange = (event) => {
-    setNewNote(event.target.value)
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value)
   }
-
-  const notesToShow = showAll
-    ? notes
-    : notes.filter(note => note.important)
 
   return (
     <div>
-      <h1>Notes</h1>
-      <Notification message={errorMessage} />
-      <div>
-        <button onClick={() => setShowAll(!showAll)}>
-          show {showAll ? 'important' : 'all' }
-        </button>
-      </div>      
+      <h1>Phone book</h1>      
       <ul>
-        {notesToShow.map(note => 
-          <Note
-            key={note.id}
-            note={note}
-            toggleImportance={() => toggleImportanceOf(note.id)}
+        {persons.map(person => 
+          <Person
+            name={person.name}
+            number = {person.number}
           />
         )}
       </ul>
-      <form onSubmit={addNote}>
+      <form onSubmit={addPerson}>
       <input
-          value={newNote}
-          onChange={handleNoteChange}
+          value={newName}
+          onChange={handleNameChange}
         />
-        <button type="submit">save</button>
+         <input
+          value={newNumber}
+          onChange={handleNumberChange}
+        />
+        <button type="submit">Save</button>
       </form>
       <Footer />
     </div>

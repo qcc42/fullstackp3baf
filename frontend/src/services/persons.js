@@ -1,5 +1,5 @@
 import axios from 'axios'
-const baseUrl = 'https://fullstackp3baf.onrender.com/api/notes'
+const baseUrl = 'http://localhost:3001/api/persons'
 
 const getAll = () => {
   const request = axios.get(baseUrl)
