@@ -1,8 +1,11 @@
-const Person = ({ name, number }) => {
-    return (
-    <li className='note'>
-      {name}: {number} 
+const Person = ({id, name, number, onClick}) => {
 
+    return (
+    <li className='note' key={id}>
+      {name}: {number} 
+      <button name = {id} onClick = {(event) => onClick(event, id)}>
+        DEL
+      </button>
     </li>
   )
 }

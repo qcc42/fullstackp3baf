@@ -3,6 +3,9 @@ import Person from './components/Person'
 import Footer from './components/Footer'
 import personService from './services/persons'
 
+
+
+
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] =  useState('')
@@ -12,16 +15,25 @@ const App = () => {
     personService
       .getAll()
       .then(initialPersons => {
+        console.log(JSON.stringify(initialPersons));
         setPersons(initialPersons)
       })
   }, [])
 
+  const getRandomInt = (min, max)  => {
+    const minCeiled = Math.ceil(min);
+    const maxFloored = Math.floor(max);
+    return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
+  }
+
   const addPerson = (event) => {
     event.preventDefault()
     const personObject = {
+      id: getRandomInt(0, 1000).toString(10),
       name: newName,
       number: newNumber
     }
+    
   
     personService
       .create(personObject)
@@ -30,6 +42,16 @@ const App = () => {
           setNewName('')
           setNewNumber('')
       })
+  }
+
+
+  const delPerson = (event, id) => {
+    event.preventDefault()
+    console.log(id)
+    personService.remove(id)
+    .then(returnedPerson => {
+      setPersons(persons.filter(person => person.id != id))
+    })
   }
 
   const handleNameChange = (event) => {
@@ -45,8 +67,10 @@ const App = () => {
       <ul>
         {persons.map(person => 
           <Person
+            id = {person.id}
             name={person.name}
             number = {person.number}
+            onClick = {delPerson}
           />
         )}
       </ul>
