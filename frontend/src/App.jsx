@@ -29,7 +29,7 @@ const App = () => {
   const addPerson = (event) => {
     event.preventDefault()
     const personObject = {
-      id: getRandomInt(0, 1000).toString(10),
+      id: persons.length,
       name: newName,
       number: newNumber
     }

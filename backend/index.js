@@ -13,6 +13,15 @@ const requestLogger = (request, response, next) => {
   next()
 }
 
+const errorHandler = (error, request, response, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return response.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
 
 app.use(express.json())
 app.use(requestLogger)
@@ -27,6 +36,8 @@ app.use((req, res, next) => {
   res.status(200).setHeader('Access-Control-Allow-Origin', '*');
   next();
 });
+
+app.use(errorHandler)
 
 app.get('/', cors(), (request, response) => {
   response.status(200)
@@ -49,7 +60,7 @@ app.get('/api/persons/:id',cors(), (request, response, next) => {
     })
     .catch(error => next(error))
 })
-app.post('/api/persons', cors(), (request, response) => {
+app.post('/api/persons', cors(), (request, response, next) => {
   const body = request.body
 
   let person = new Person({
@@ -60,7 +71,7 @@ app.post('/api/persons', cors(), (request, response) => {
 
   person.save().then(savedNote => {
     response.status(200).json(savedNote)
-  })
+  }).catch(error => next(error))
 
 })
 
