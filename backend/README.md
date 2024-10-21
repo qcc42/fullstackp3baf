@@ -1,4 +1,6 @@
-Server can be tested e.g. by running test.rest.
-Link to server is:
+Backend can be accessed on:
+https://fullstackp3baf.onrender.com/api/persons/
 
-https://fullstackp3baf.onrender.com/
+and specific persons e.g. like:
+
+https://fullstackp3baf.onrender.com/api/persons/1
