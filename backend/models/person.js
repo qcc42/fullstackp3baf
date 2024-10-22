@@ -1,29 +1,25 @@
-const mongoose = require('mongoose')
-require('dotenv').config()
+const mongoose = require('mongoose');
+require('dotenv').config();
 
-mongoose.set('strictQuery', false)
+mongoose.set('strictQuery', false);
+const url = process.env.MONGODB_URI;
 
-
-const url = process.env.MONGODB_URI
-
-
-console.log('connecting to', url)
+console.log('connecting to', url);
 
 mongoose.connect(url)
 
-  .then(result => {
-    console.log('connected to MongoDB')
+  .then(() => {
+    console.log('connected to MongoDB');
   })
-  .catch(error => {
+  .catch((error) => {
     console.log('error connecting to MongoDB:', error.message)
-  })
+  });
 
-let personSchema = new mongoose.Schema({
+const personSchema = new mongoose.Schema({
   name: String,
   number: String,
   id: String,
-},
-)
+});
 
 const model = mongoose.model('Person', personSchema)
 
